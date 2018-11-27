@@ -18,6 +18,11 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -35,6 +40,9 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
     // Broadcast Receiver
     private IntentFilter intentFilter = null;
     private BroadcastReceiverMap broadcastReceiverMap = null;
+
+    FirebaseDatabase database = null;
+    DatabaseReference myRef = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -185,6 +193,27 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
     private ArrayList<MapLocation> loadData(){
 
         // FIXME Method should create/return a new Collection with all MapLocation available on firebase.
+
+        database = FirebaseDatabase.getInstance();
+        myRef = database.getReference("message");
+
+        // Read from the database
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                String value = dataSnapshot.getValue(String.class);
+                Log.d("Reading data", "Value is: " + value);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w("On cancelled", "Failed to read value.", error.toException());
+            }
+        });
+
 
         ArrayList<MapLocation> mapLocations = new ArrayList<>();
 
