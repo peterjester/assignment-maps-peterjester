@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         android:name="com.google.android.gms.maps.MapFragment"
         android:id="@+id/google_map"
-        tools:context=".MapsActivity"
+        tools:context=".activity.MapsActivity"
         />
 
 </android.support.constraint.ConstraintLayout>

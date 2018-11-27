@@ -30,6 +30,7 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
     private LatLng currentLatLng;
     private MapFragment mapFragment;
     private Marker currentMapMarker;
+    private GoogleMap googleMap;
 
     // Broadcast Receiver
     private IntentFilter intentFilter = null;
@@ -44,7 +45,7 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
         mapFragment.getMapAsync(this);
 
         // Instantiating a new IntentFilter to support BroadcastReceivers
-        intentFilter = new IntentFilter("mc.sweng888.psu.edu.newmapsexample.action.NEW_MAP_LOCATION_BROADCAST");
+        intentFilter = new IntentFilter("com.example.peterjester.assignment_maps_peterjester.NEW_MAP_LOCATION_BROADCAST");
         broadcastReceiverMap = new BroadcastReceiverMap();
 
     }
@@ -70,12 +71,14 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
+        this.googleMap = googleMap;
+
         Intent intent = getIntent();
         Double latiude = intent.getDoubleExtra("LATITUDE", Double.NaN);
         Double longitude = intent.getDoubleExtra("LONGITUDE", Double.NaN);
         String location = intent.getStringExtra("LOCATION");
 
-        // Set initial positionning (Latitude / longitude)
+        // Set initial positioning (Latitude / longitude)
         currentLatLng = new LatLng(latiude, longitude);
 
         googleMap.addMarker(new MarkerOptions()

@@ -49,7 +49,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         sendBroadcast(explicitIntent);
 
         // Navigating to MapActivity
-        Intent intent = new Intent(this, com.example.peterjester.assignment_maps_peterjester.activity.MapActivity.class);
+        Intent intent = new Intent(this, MapActivity.class);
         intent.putExtra("LATITUDE", latitude);
         intent.putExtra("LONGITUDE", longitude);
         intent.putExtra("LOCATION", location);

@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "84261867114",
+    "firebase_url": "https://assignment-maps-peterjester.firebaseio.com",
+    "project_id": "assignment-maps-peterjester",
+    "storage_bucket": "assignment-maps-peterjester.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:84261867114:android:61c555b356e541cb",
+        "android_client_info": {
+          "package_name": "com.example.peterjester.assignment_maps_peterjester"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "84261867114-70ipttrn86la016qnbku2jsq9d53eul8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.peterjester.assignment_maps_peterjester",
+            "certificate_hash": "8950a674a7642b850fff6dd11bb26706a1b458a2"
+          }
+        },
+        {
+          "client_id": "84261867114-tatkn7uhctmv00vn97f7dgl6ig7k1og5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyABqBnEjmCi2si5PkvQfXaBV6HRlNOzYSI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "84261867114-tatkn7uhctmv00vn97f7dgl6ig7k1og5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
