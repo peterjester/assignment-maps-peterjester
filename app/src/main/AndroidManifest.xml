@@ -10,7 +10,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <uses-library android:name="org.apache.http.legacy" android:required="false" />
 
         <activity android:name=".activity.MainActivity">
             <intent-filter>
@@ -24,13 +23,15 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyBZSGjDzxx2A1A6CabOE_GgENVHNW_HKPc" />
+            android:value="AIzaSyC9ZKD-X2X9CzYP7tl9e3mh4koU4d0xyfA" />
 
         <receiver android:name=".broadcast.BroadcastReceiverMap">
             <intent-filter>
                 <action android:name="com.example.peterjester.assignment_maps_peterjester.NEW_MAP_LOCATION_BROADCAST" />
             </intent-filter>
         </receiver>
+
+        <uses-library android:name="org.apache.http.legacy" android:required="false" />
 
     </application>
 

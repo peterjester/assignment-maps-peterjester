@@ -35,7 +35,7 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
     private LatLng currentLatLng;
     private MapFragment mapFragment;
     private Marker currentMapMarker;
-    private GoogleMap googleMap;
+    private GoogleMap maps;
 
     // Broadcast Receiver
     private IntentFilter intentFilter = null;
@@ -48,6 +48,8 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.maps_activity);
+
+        loadData();
 
         mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.google_map);
         mapFragment.getMapAsync(this);
@@ -79,7 +81,7 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
-        this.googleMap = googleMap;
+        this.maps = googleMap;
 
         Intent intent = getIntent();
         Double latiude = intent.getDoubleExtra("LATITUDE", Double.NaN);
@@ -89,15 +91,15 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
         // Set initial positioning (Latitude / longitude)
         currentLatLng = new LatLng(latiude, longitude);
 
-        googleMap.addMarker(new MarkerOptions()
+        maps.addMarker(new MarkerOptions()
                 .position(currentLatLng)
                 .title(location)
         );
 
         // Set the camera focus on the current LatLtn object, and other map properties.
-        mapCameraConfiguration(googleMap);
-        useMapClickListener(googleMap);
-        useMarkerClickListener(googleMap);
+        mapCameraConfiguration(maps);
+        useMapClickListener(maps);
+        useMarkerClickListener(maps);
     }
 
     /** Step 2 - Set a few properties for the map when it is ready to be displayed.
@@ -201,10 +203,18 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                String value = dataSnapshot.getValue(String.class);
-                Log.d("Reading data", "Value is: " + value);
+//                 This method is called once with the initial value and again
+//                 whenever data at this location is updated.
+                for(DataSnapshot value : dataSnapshot.getChildren()) {
+                    String location = value.child("location").getValue(String.class);
+                    double latitude = value.child("latitude").getValue(double.class);
+                    double longitude = value.child("longitude").getValue(double.class);
+
+                    Log.d("Reading location", "Value is: " + location);
+                    Log.d("Reading latitude", "Value is: " + latitude);
+                    Log.d("Reading longitude", "Value is: " + longitude);
+
+                }
             }
 
             @Override
