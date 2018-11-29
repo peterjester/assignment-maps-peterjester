@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.example.peterjester.assignment_maps_peterjester.R;
@@ -18,11 +20,11 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -44,12 +46,12 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
     FirebaseDatabase database = null;
     DatabaseReference myRef = null;
 
+    ArrayList<MapLocation> mapLocations = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.maps_activity);
-
-        loadData();
 
         mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.google_map);
         mapFragment.getMapAsync(this);
@@ -72,8 +74,6 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
         // Unregister the Broadcast Receiver
         unregisterReceiver(broadcastReceiverMap);
         super.onStop();
-
-
 
     }
 
@@ -100,6 +100,7 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
         mapCameraConfiguration(maps);
         useMapClickListener(maps);
         useMarkerClickListener(maps);
+        createMarkersFromFirebase(maps);
     }
 
     /** Step 2 - Set a few properties for the map when it is ready to be displayed.
@@ -189,6 +190,7 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
 
     public void createMarkersFromFirebase(GoogleMap googleMap){
         // FIXME Call loadData() to gather all MapLocation instances from firebase.
+        ArrayList<MapLocation> mapLocations = loadData();
         // FIXME Call createCustomMapMarkers for each MapLocation in the Collection
     }
 
@@ -197,18 +199,29 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
         // FIXME Method should create/return a new Collection with all MapLocation available on firebase.
 
         database = FirebaseDatabase.getInstance();
-        myRef = database.getReference("message");
+        myRef = database.getInstance().getReference();
+
 
         // Read from the database
-        myRef.addValueEventListener(new ValueEventListener() {
+        myRef.addChildEventListener(new ChildEventListener() {
+
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                Log.d("hello database", "onChildAdded: ");
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 //                 This method is called once with the initial value and again
 //                 whenever data at this location is updated.
+                Log.d("Number of elements in database", "onDataChange: " + dataSnapshot.getChildrenCount());
+
                 for(DataSnapshot value : dataSnapshot.getChildren()) {
                     String location = value.child("location").getValue(String.class);
-                    double latitude = value.child("latitude").getValue(double.class);
-                    double longitude = value.child("longitude").getValue(double.class);
+                    String latitude = value.child("latitude").getValue(String.class);
+                    String longitude = value.child("longitude").getValue(String.class);
+
+                    mapLocations.add(new MapLocation(location, location, latitude, longitude));
 
                     Log.d("Reading location", "Value is: " + location);
                     Log.d("Reading latitude", "Value is: " + latitude);
@@ -218,14 +231,26 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
             }
 
             @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                Log.d("hello database", "onChildRemoved: ");
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                Log.d("hello database", "onChildRemoved: ");
+
+            }
+
+            @Override
             public void onCancelled(DatabaseError error) {
                 // Failed to read value
                 Log.w("On cancelled", "Failed to read value.", error.toException());
             }
+
         });
 
 
-        ArrayList<MapLocation> mapLocations = new ArrayList<>();
 
         mapLocations.add(new MapLocation("New York","City never sleeps", String.valueOf(39.953348), String.valueOf(-75.163353)));
         mapLocations.add(new MapLocation("Paris","City of lights", String.valueOf(48.856788), String.valueOf(2.351077)));
