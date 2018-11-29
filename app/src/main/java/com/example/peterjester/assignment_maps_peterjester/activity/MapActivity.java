@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.peterjester.assignment_maps_peterjester.R;
 import com.example.peterjester.assignment_maps_peterjester.broadcast.BroadcastReceiverMap;
@@ -100,6 +101,9 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
         mapCameraConfiguration(maps);
         useMapClickListener(maps);
         useMarkerClickListener(maps);
+        useMapLongClickListener(maps);
+        userMapCameraMoveLister(maps);
+
         createMarkersFromFirebase(maps);
     }
 
@@ -217,15 +221,12 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
                 Log.d("Number of elements in database", "onDataChange: " + dataSnapshot.getChildrenCount());
 
                 for(DataSnapshot value : dataSnapshot.getChildren()) {
-                    String location = value.child("location").getValue(String.class);
-                    String latitude = value.child("latitude").getValue(String.class);
-                    String longitude = value.child("longitude").getValue(String.class);
+                    MapLocation location = dataSnapshot.getValue(MapLocation.class);
+                    mapLocations.add(location);
 
-                    mapLocations.add(new MapLocation(location, location, latitude, longitude));
-
-                    Log.d("Reading location", "Value is: " + location);
-                    Log.d("Reading latitude", "Value is: " + latitude);
-                    Log.d("Reading longitude", "Value is: " + longitude);
+                    Log.d("Reading location", "Value is: " + location.getDescription());
+                    Log.d("Reading latitude", "Value is: " + location.getLatitude());
+                    Log.d("Reading longitude", "Value is: " + location.getLongitude());
 
                 }
             }
@@ -258,6 +259,30 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
         mapLocations.add(new MapLocation("Tokyo","City of technology", String.valueOf(35.689506), String.valueOf(139.691700)));
 
        return mapLocations;
+    }
+
+    private void useMapLongClickListener(GoogleMap googleMap)
+    {
+        googleMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+
+            @Override
+            public void onMapLongClick(LatLng latLng) {
+                Toast.makeText(MapActivity.this, "You just pressed the map for a long time",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
+    private void userMapCameraMoveLister(GoogleMap googleMap)
+    {
+        googleMap.setOnCameraMoveStartedListener(new GoogleMap.OnCameraMoveStartedListener() {
+            @Override
+            public void onCameraMoveStarted(int i) {
+                Toast.makeText(MapActivity.this, "The camera is moving.",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 }

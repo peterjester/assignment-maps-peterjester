@@ -15,7 +15,7 @@
       },
       "oauth_client": [
         {
-          "client_id": "84261867114-70ipttrn86la016qnbku2jsq9d53eul8.apps.googleusercontent.com",
+          "client_id": "84261867114-sm19vle4hhvl91m0l10cvhgh4e05mej1.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.peterjester.assignment_maps_peterjester",
@@ -23,13 +23,13 @@
           }
         },
         {
-          "client_id": "84261867114-tatkn7uhctmv00vn97f7dgl6ig7k1og5.apps.googleusercontent.com",
+          "client_id": "84261867114-m0fde9u8s3rst2809lc2p6secicqd05r.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyABqBnEjmCi2si5PkvQfXaBV6HRlNOzYSI"
+          "current_key": "AIzaSyBWfgw0NnOGXh57YdUlbqEgtudDMIXNQ0g"
         }
       ],
       "services": {
@@ -40,7 +40,7 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "84261867114-tatkn7uhctmv00vn97f7dgl6ig7k1og5.apps.googleusercontent.com",
+              "client_id": "84261867114-m0fde9u8s3rst2809lc2p6secicqd05r.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
