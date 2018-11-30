@@ -15,7 +15,7 @@ public class BroadcastReceiverMap extends BroadcastReceiver {
 
     private static final String MAP_TAG = "MAP_TAG";
 
-    public static final String NEW_MAP_LOCATION_BROADCAST = "mc.sweng888.psu.edu.newmapsexample.action.NEW_MAP_LOCATION_BROADCAST";
+    public static final String NEW_MAP_LOCATION_BROADCAST = "com.example.peterjester.assignment_maps_peterjester.NEW_MAP_LOCATION_BROADCAST";
     public static final String EXTRA_LATITUDE = "LATITUDE";
     public static final String EXTRA_LONGITUDE = "LONGITUDE";
     public static final String MAP_LOCATION = "LOCATION";

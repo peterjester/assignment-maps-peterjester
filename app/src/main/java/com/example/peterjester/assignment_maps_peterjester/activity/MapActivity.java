@@ -193,17 +193,23 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
     }
 
     public void createMarkersFromFirebase(GoogleMap googleMap){
-        // FIXME Call loadData() to gather all MapLocation instances from firebase.
-        ArrayList<MapLocation> mapLocations = loadData();
-        // FIXME Call createCustomMapMarkers for each MapLocation in the Collection
+        // Call loadData() to gather all MapLocation instances from firebase.
+        firebaseloadData();
+
+        // Call createCustomMapMarkers for each MapLocation in the Collection
+        for(MapLocation location : mapLocations) {
+            LatLng latLong = new LatLng(Double.valueOf(location.getLatitude()), Double.valueOf(location.getLongitude()));
+            createCustomMapMarkers(maps, latLong, location.getDescription(),location.getTitle() );
+            triggerBroadcastMessageFromFirebase(latLong, location.getDescription());
+        }
     }
 
-    private ArrayList<MapLocation> loadData(){
+    private ArrayList<MapLocation> firebaseloadData(){
 
         // FIXME Method should create/return a new Collection with all MapLocation available on firebase.
 
         database = FirebaseDatabase.getInstance();
-        myRef = database.getInstance().getReference();
+        myRef = database.getReference("places");
 
 
         // Read from the database
@@ -212,23 +218,22 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 Log.d("hello database", "onChildAdded: ");
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-//                 This method is called once with the initial value and again
+//                This method is called once with the initial value and again
 //                 whenever data at this location is updated.
                 Log.d("Number of elements in database", "onDataChange: " + dataSnapshot.getChildrenCount());
 
-                for(DataSnapshot value : dataSnapshot.getChildren()) {
-                    MapLocation location = dataSnapshot.getValue(MapLocation.class);
-                    mapLocations.add(location);
+                MapLocation location = dataSnapshot.getValue(MapLocation.class);
 
                     Log.d("Reading location", "Value is: " + location.getDescription());
                     Log.d("Reading latitude", "Value is: " + location.getLatitude());
                     Log.d("Reading longitude", "Value is: " + location.getLongitude());
 
-                }
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+
             }
 
             @Override
@@ -283,6 +288,17 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
                         Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void triggerBroadcastMessageFromFirebase(LatLng latLng, String description) {
+        // Broadcast Receiver
+        Intent explicitIntent = new Intent(this, BroadcastReceiverMap.class);
+
+        explicitIntent.putExtra("LATITUDE", latLng.latitude);
+        explicitIntent.putExtra("LONGITUDE", latLng.longitude);
+        explicitIntent.putExtra("LOCATION", description);
+
+        sendBroadcast(explicitIntent);
     }
 
 }
